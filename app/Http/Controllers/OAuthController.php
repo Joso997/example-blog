@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Laravel\Passport\Client;
 
 class OAuthController extends Controller
 {
+    private string $client_id = '97b403ff-8a0e-48e4-8afc-3c40681c8f4e';
+    private string $client_secret = 'fZtCyFdwKSXuBDeMBqRETt0llu2bnMpISz74AjdZ';
+
     public function redirect(){
 
         $queries = http_build_query([
-            'client_id' => '97b1d39c-307b-4095-bfdb-82c4b530022a',
-            'redirect_uri' => 'http://blog.test/oauth/callback',
+            'client_id' => Client::first()->id,
+            'redirect_uri' => Client::first()->redirect,
             'response_type' => 'code'
         ]);
 
@@ -23,14 +27,15 @@ class OAuthController extends Controller
     public function callback(Request $request){
         $response = Http::post('http://blog.test/oauth/token',[
             'grant_type' => 'authorization_code',
-            'client_id' => '97b1d39c-307b-4095-bfdb-82c4b530022a',
-            'client_secret' => 'EXeMGWjiz5F8cMXBUY2NZGQV0PPp5Ejs7p50IADT',
-            'redirect_uri' => 'http://blog.test/oauth/callback',
+            'client_id' => Client::first()->id,
+            'client_secret' => Client::first()->secret,
+            'redirect_uri' => Client::first()->redirect,
             'code' => $request->code
         ]);
 
         //$response = $response->json();
 
-        return Redirect::to(URL::previous() . '#' . base64_encode($response));
+        //return Redirect::to(URL::previous() . '#' . base64_encode($response));
+        return Redirect::away("http://localhost:8080#" . base64_encode($response));
     }
 }
