@@ -16,15 +16,16 @@ class RegionController extends Controller
     public function resolveRegion(){
         return response(
             [
-                (new FieldComponent("Name", "Title"))->get(),
-                (new DataListComponent("List", "List", ["koko", "bil", "test"]))->get(),
-                (new RadioComponent("Radio", "Radio", ["ikik", "bil", "test"]))->get(),
+                (new FieldComponent("Code", "code"))->get(),
+                (new DataListComponent("Division", "division", ["default"]))->get(),
+                (new DataListComponent("Group", "group", ["default"]))->get(),
+                /*(new RadioComponent("Radio", "Radio", ["ikik", "bil", "test"]))->get(),
                 (new SelectListComponent("Select", "Select", ["koko", "bil", "test"]))->get(),
                 (new FieldComponent("Description", "Description"))->get(),
                 (new FieldComponent('Amount', 'Amount', 'Number'))->changeDefaultAction(ActionsEnum::InsertNumber)->get(),
                 (new FieldComponent('Amount', 'Amount', 'Range'))->changeDefaultAction(ActionsEnum::InsertNumber)->get(),
                 (new CheckBoxComponent('Checkbox', 'Checkbox', 'checkbox'))->get(),
-                (new AlertComponent("Alert", "alert", "I am alert", "alert alert-primary"))->get(),
+                (new AlertComponent("Alert", "alert", "I am alert", "alert alert-primary"))->get(),*/
                 (new SubmitComponent("Submit", "SubmitButton", 'btn btn-primary'))->get()
 
 

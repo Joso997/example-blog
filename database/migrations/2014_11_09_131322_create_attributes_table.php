@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEntities extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateEntities extends Migration
      */
     public function up()
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('attributes', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('code')->unique();
-            $table->json('divisions')->foreign('division_id')->references('id')->on('divisions');
+            $table->string('name')->unique();
             $table->string('group')->foreign('group_id')->references('id')->on('groups');
-            $table->json('attribute_values')->nullable();
+            $table->json('attribute_values');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateEntities extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('attributes');
     }
-}
+};

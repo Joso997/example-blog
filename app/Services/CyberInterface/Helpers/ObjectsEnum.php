@@ -9,11 +9,9 @@ enum ObjectsEnum: int
     case Button = 2;
     case Text = 3;
     case ShowResolve = 4;
-    case ContentToolkitObject = 5;
-    case ModularText = 6;
-    case Alert = 7;
-    case CheckBox = 8;
-    case DataList = 9;
-    case SelectList = 10;
-    case Radio = 11;
+    case Alert = 5;
+    case CheckBox = 6;
+    case DataList = 7;
+    case SelectList = 8;
+    case Radio = 9;
 }

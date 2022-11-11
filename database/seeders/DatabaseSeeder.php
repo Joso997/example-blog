@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Division;
+use App\Models\Group;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,5 +24,12 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(UsersTableSeeder::class);
         $this->call(OauthClientTableSeeder::class);
+        Division::create([
+            'name' => 'default',
+            'belongings' => json_encode('default'),
+        ]);
+        Group::create([
+            'name' => 'default'
+        ]);
     }
 }
