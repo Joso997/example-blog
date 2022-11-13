@@ -23,7 +23,29 @@ class EntityController extends Controller
     {
         return response(Entity::orderBy('created_at', 'asc')->get()->pluck('attribute_values'));
     }
+    public function filter(string $title) : Response
+    {
+        $result = null;
+        $temp = [];
+        $data = Entity::orderBy('created_at', 'asc')->get()->pluck('json');
+        foreach ($data as $stat) {
+            array_push($temp, $stat);
+        }
+        for ($i = 0; $i < count($temp); $i++) {
+            for ($j = 0; $j < count($temp[$i]); $j++) {
+                for ($k = 0; $k < count($temp[$i][$j]["Stats"]); $k++) {
+                    dd($temp[$i][$j]["Stats"][$k]["Data"]);
+                }
+            }
 
+            if ($stat["Stats"][StatsEnum::Tag]["Data"] === "Title" || $stat["Stats"][StatsEnum::Tag]["Data"] === "Name") {
+                if (strtolower($title) === strtolower($stat["Stats"][StatsEnum::Value]["Data"])) {
+                    $result = $stat;
+                }
+            }
+            return response($result);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
