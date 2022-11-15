@@ -19,33 +19,49 @@ class EntityController extends Controller
      *
      * @return Response
      */
-    public function index(): Response
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        return response(Entity::orderBy('created_at', 'asc')->get()->pluck('attribute_values'));
-    }
-    public function filter(string $title) : Response
-    {
-        $result = null;
-        $temp = [];
-        $data = Entity::orderBy('created_at', 'asc')->get()->pluck('json');
-        foreach ($data as $stat) {
-            array_push($temp, $stat);
-        }
-        for ($i = 0; $i < count($temp); $i++) {
-            for ($j = 0; $j < count($temp[$i]); $j++) {
-                for ($k = 0; $k < count($temp[$i][$j]["Stats"]); $k++) {
-                    dd($temp[$i][$j]["Stats"][$k]["Data"]);
+        $response = null;
+        $entities=Entity::orderBy('created_at','asc')->get()->pluck('attribute_values');
+        foreach ($entities as $entity){
+            $inResponse = null;
+            foreach ($entity as $item){
+                $item = (object)$item;
+                switch($item->Stats[StatsEnum::Tag->value]['Data']){
+                    case 'division':
+                    case 'group':
+                    case 'code':
+                        $inResponse[]=$item;
+                        break;
+                    default:
+                        break;
                 }
             }
+            $response[]=$inResponse;
+        }
 
-            if ($stat["Stats"][StatsEnum::Tag]["Data"] === "Title" || $stat["Stats"][StatsEnum::Tag]["Data"] === "Name") {
-                if (strtolower($title) === strtolower($stat["Stats"][StatsEnum::Value]["Data"])) {
-                    $result = $stat;
+        return response()->json($response);
+    }
+
+    public function filter(string $title): \Illuminate\Http\JsonResponse
+    {
+        //dd($title);
+        $response = null;
+        $entities=Entity::orderBy('created_at','asc')->get()->pluck('attribute_values');
+        foreach ($entities as $entity){
+            $inResponse = null;
+            foreach ($entity as $item){
+                $item = (object)$item;
+                if($item->Stats[StatsEnum::Value->value]['Data'] === $title){
+                    $inResponse[] = $item;
                 }
             }
-            return response($result);
+            $response[]=$inResponse;
         }
+        dd($response);
+        return response()->json($response);
     }
+
     /**
      * Show the form for creating a new resource.
      *
