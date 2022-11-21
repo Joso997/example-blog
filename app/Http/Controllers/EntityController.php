@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Division;
 use App\Models\Entity;
 use App\Models\Group;
+use App\Services\CyberInterface\Helpers\ActionsEnum;
+use App\Services\CyberInterface\Helpers\ObjectsEnum;
+use App\Services\CyberInterface\Helpers\RegionsEnum;
 use App\Services\CyberInterface\Helpers\StatsEnum;
+use App\Services\CyberInterface\Helpers\SubObjectsEnum;
+use App\Services\CyberInterface\ObjectTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -17,11 +22,33 @@ class EntityController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(): Response
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        return response(Entity::orderBy('created_at', 'asc')->get()->pluck('attribute_values'));
+        $response = null;
+        $entities = Entity::orderBy('created_at', 'asc')->get()->pluck('attribute_values');
+        /*foreach ($entities as $entity){
+            $restructuredEntities[] = array_map(fn($x)=>$this->restructure($x), $entity);
+        }*/
+        foreach ($entities as $entity ){
+            $inResponse = null;
+            foreach ($entity as $item){
+                $item = (object)$item;
+                switch($item->Stats[StatsEnum::Tag->value]['Data']){
+                    case 'id':
+                    case 'division':
+                    case 'group':
+                    case 'code':
+                        $inResponse[] = $item;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            $response[] = $inResponse;
+        }
+        return response()->json($response);
     }
 
     /**
@@ -125,5 +152,15 @@ class EntityController extends Controller
             return response('deleted successfully'); //shows a message when the delete operation was successful.
         }
         return response('failed', 122);
+    }
+
+    private function restructure($value){
+        return new ObjectTemplate(
+            RegionsEnum::from($value->Region),
+            ObjectsEnum::from($value->ObjectEnum),
+            SubObjectsEnum::from($value->SubObjectEnum),
+            ActionsEnum::from($value->ActionEnum),
+            (array)$value->Stats
+        );
     }
 }
