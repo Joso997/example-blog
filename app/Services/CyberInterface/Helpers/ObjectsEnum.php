@@ -14,4 +14,6 @@ enum ObjectsEnum: int
     case DataList = 7;
     case SelectList = 8;
     case Radio = 9;
+    case Column = 10;
+    case ColumnButton = 11;
 }
