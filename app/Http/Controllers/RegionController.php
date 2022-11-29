@@ -26,7 +26,7 @@ class RegionController extends Controller
                 (new FieldComponent('Amount', 'Amount', 'Range'))->changeDefaultAction(ActionsEnum::InsertNumber)->get(),
                 (new CheckBoxComponent('Checkbox', 'Checkbox', 'checkbox'))->get(),
                 (new AlertComponent("Alert", "alert", "I am alert", "alert alert-primary"))->get(),*/
-                (new SubmitComponent("Submit", "SubmitButton", 'btn btn-primary'))->get()
+                //(new SubmitComponent("Submit", "SubmitButton", 'btn btn-primary'))->get()
 
 
             ]

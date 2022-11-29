@@ -24,5 +24,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->resource('entity', EntityController::class);
 Route::middleware('auth:api')->resource('group', GroupController::class);
-Route::middleware('auth:api')->resource('division', DivisionController::class);
+Route::/*middleware('auth:api')->*/resource('division', DivisionController::class);
 Route::middleware('auth:api')->get('form', [RegionController::class, 'resolveRegion']);

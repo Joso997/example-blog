@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Division;
+use App\Services\CyberInterface\FormComponents\FieldViewComponent;
 use Illuminate\Http\Request;
 
 class DivisionController extends Controller
@@ -10,11 +11,21 @@ class DivisionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $response = [];
+        $entities = Division::orderBy('created_at', 'asc')->get();
+        //dd($entities);
+        foreach ($entities as $entity){
+            $response[] = [
+                (new FieldViewComponent("Name", "name", $entity->id))->setOptional($entity->name)->get(),
+                (new FieldViewComponent("Belong", "belong", $entity->id))->setOptional(json_decode($entity->belongings))->get(),
+            ];
+        }
+
+        return response()->json($response);
     }
 
     /**
