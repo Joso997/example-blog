@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
@@ -33,9 +34,6 @@ class OAuthController extends Controller
             'code' => $request->code
         ]);
 
-        //$response = $response->json();
-
-        //return Redirect::to(URL::previous() . '#' . base64_encode($response));
         return Redirect::away("http://localhost:8080#" . base64_encode($response));
     }
 }

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Services\CyberInterface\FormComponents\DataListComponent;
+use App\Services\CyberInterface\FormComponents\FieldComponent;
+use App\Services\CyberInterface\FormComponents\FieldViewComponent;
+use App\Services\CyberInterface\FormComponents\SubmitComponent;
+use App\Services\CyberInterface\Helpers\StatsEnum;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -10,11 +15,19 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $response = [];
+        $entities = Group::orderBy('created_at', 'asc')->get();
+        foreach ($entities as $entity){
+            $response[] = [
+                (new FieldViewComponent("Name", "name", $entity->id))->setOptional($entity->name)->get(),
+            ];
+        }
+
+        return response()->json($response);
     }
 
     /**

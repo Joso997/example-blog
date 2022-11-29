@@ -10,6 +10,10 @@ class Group extends Model
 {
     use TraitUuid, HasFactory;
 
+    protected $fillable = [
+        'name',
+    ];
+
     protected $casts = [
         'name' => 'string'
     ];
