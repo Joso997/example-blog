@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attribute;
 use App\Models\Group;
 use App\Services\CyberInterface\FormComponents\AlertComponent;
+use App\Services\CyberInterface\FormComponents\DataListComponent;
 use App\Services\CyberInterface\FormComponents\FieldComponent;
 use App\Services\CyberInterface\FormComponents\FieldViewComponent;
 use App\Services\CyberInterface\FormComponents\SubmitComponent;
@@ -62,6 +63,8 @@ class AttributeController extends Controller
         return response(
             [
                 (new FieldComponent("Name", "name"))->get(),
+                (new FieldComponent('Label Name', 'labelName'))->get(),
+                (new DataListComponent('Field Type', 'fieldType', []))
             ]
         );
     }
