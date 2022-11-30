@@ -9,4 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
     use TraitUuid, HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
+
+    protected $casts = [
+        'name' => 'string'
+    ];
 }

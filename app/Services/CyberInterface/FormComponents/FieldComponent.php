@@ -34,7 +34,8 @@ class FieldComponent extends ComponentAbstract
             StatsEnum::Design->value =>["Data" => $this->design],
             StatsEnum::Tag->value =>["Data" => $this->tag],
             StatsEnum::ElementType->value =>["Data" => $this->elementType],
-            StatsEnum::Placeholder->value =>["Data" => $this->placeholder]
+            StatsEnum::Placeholder->value =>["Data" => $this->placeholder],
+            StatsEnum::Id->value => ($this->id !== ''? ["Data" => $this->id]:["Data" => null])
         ];
     }
 }

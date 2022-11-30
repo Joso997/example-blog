@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Division;
+use App\Services\CyberInterface\FormComponents\DataListComponent;
+use App\Services\CyberInterface\FormComponents\FieldComponent;
 use App\Services\CyberInterface\FormComponents\FieldViewComponent;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DivisionController extends Controller
 {
@@ -36,6 +39,17 @@ class DivisionController extends Controller
     public function create()
     {
         //
+    }
+
+    public function resolveRegionForm(): Response
+    {
+        return response(
+            [
+                (new FieldComponent("Code", "code"))->get(),
+                (new DataListComponent("Division", "division", ["default"]))->get(),
+                (new DataListComponent("Group", "group", ["default"]))->get(),
+            ]
+        );
     }
 
     /**

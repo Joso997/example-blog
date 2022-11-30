@@ -28,7 +28,8 @@ class SubmitComponent extends ComponentAbstract
             StatsEnum::Label->value =>["Data" => $this->label],
             StatsEnum::Value->value => ["Data" => $this->value],
             StatsEnum::Design->value =>["Data" => $this->design],
-            StatsEnum::Tag->value =>["Data" => $this->tag]
+            StatsEnum::Tag->value =>["Data" => $this->tag],
+            StatsEnum::Id->value => ($this->id !== ''? ["Data" => $this->id]:["Data" => null])
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\GroupController;
@@ -24,5 +25,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->resource('entity', EntityController::class);
 Route::middleware('auth:api')->resource('group', GroupController::class);
-Route::/*middleware('auth:api')->*/resource('division', DivisionController::class);
-Route::middleware('auth:api')->get('form', [RegionController::class, 'resolveRegion']);
+Route::middleware('auth:api')->resource('division', DivisionController::class);
+Route::/*middleware('auth:api')->*/resource('attribute', AttributeController::class);
+Route::middleware('auth:api')->get('form/entity', [EntityController::class, 'resolveRegionForm']);
+Route::middleware('auth:api')->get('form/group', [GroupController::class, 'resolveRegionForm']);
+Route::middleware('auth:api')->get('form/division', [DivisionController::class, 'resolveRegionForm']);
+Route::middleware('auth:api')->get('form/attribute', [AttributeController::class, 'resolveRegionForm']);
+Route::middleware('auth:api')->get('filter/attribute/{parentId}', [AttributeController::class, 'filterIndex']);

@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Division;
 use App\Models\Entity;
 use App\Models\Group;
+use App\Services\CyberInterface\FormComponents\DataListComponent;
+use App\Services\CyberInterface\FormComponents\FieldComponent;
 use App\Services\CyberInterface\Helpers\ActionsEnum;
 use App\Services\CyberInterface\Helpers\ObjectsEnum;
 use App\Services\CyberInterface\Helpers\RegionsEnum;
 use App\Services\CyberInterface\Helpers\StatsEnum;
 use App\Services\CyberInterface\Helpers\SubObjectsEnum;
 use App\Services\CyberInterface\ObjectTemplate;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -22,9 +27,9 @@ class EntityController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         $response = null;
         $entities = Entity::orderBy('created_at', 'asc')->get()->pluck('attribute_values');
@@ -61,13 +66,24 @@ class EntityController extends Controller
         //
     }
 
+    public function resolveRegionForm(): Response
+    {
+        return response(
+            [
+                (new FieldComponent("Code", "code"))->get(),
+                (new DataListComponent("Division", "division", ["default"]))->get(),
+                (new DataListComponent("Group", "group", ["default"]))->get(),
+            ]
+        );
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $code = null;
         $division = null;

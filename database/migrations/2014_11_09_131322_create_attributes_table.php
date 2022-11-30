@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('attributes', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->string('name')->unique();
-            $table->string('group')->foreign('group_id')->references('id')->on('groups');
-            $table->json('attribute_values');
+            $table->uuid('group')->foreign('group_id')->references('id')->on('groups');
+            $table->json('attribute_values')->nullable();
             $table->timestamps();
         });
     }

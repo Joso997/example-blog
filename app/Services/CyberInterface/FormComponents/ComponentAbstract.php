@@ -14,6 +14,7 @@ abstract class ComponentAbstract
     protected ?string $value = null;
     protected string $design = "";
     protected string $placeholder = "";
+    protected string $id = "";
     protected RegionsEnum $region;
     protected ObjectsEnum $objectType;
     protected SubObjectsEnum $subObjectType;
@@ -61,6 +62,11 @@ abstract class ComponentAbstract
         $this->objectType = $objectType;
         $this->subObjectType = $subObjectType;
         $this->action = $actionType;
+        return $this;
+    }
+
+    public function withId(string $id){
+        $this->id = $id;
         return $this;
     }
 
