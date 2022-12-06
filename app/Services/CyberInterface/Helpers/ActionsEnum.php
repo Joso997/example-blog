@@ -8,7 +8,7 @@ enum ActionsEnum: int
     case Click = 1;
     case Insert = 2;
     case InsertUrl = 3;
-    case AppendEntity = 4;
+    case InsertClick = 4;
     case InsertNumber = 5;
     case Check = 6;
 }

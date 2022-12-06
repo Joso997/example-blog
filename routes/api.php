@@ -32,3 +32,4 @@ Route::middleware('auth:api')->get('form/group', [GroupController::class, 'resol
 Route::middleware('auth:api')->get('form/division', [DivisionController::class, 'resolveRegionForm']);
 Route::middleware('auth:api')->get('form/attribute', [AttributeController::class, 'resolveRegionForm']);
 Route::middleware('auth:api')->get('filter/attribute/{parentId}', [AttributeController::class, 'filterIndex']);
+Route::middleware('auth:api')->get('form/attribute/{option}', [AttributeController::class, 'resolveUserChoiceForm']);
