@@ -22,7 +22,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::middleware('auth:api')->get('/user/logout', function (Request $request) {
+    $user = Auth::user()->token();
+    $user->revoke();
+    return response('logged out');
+});
 Route::middleware('auth:api')->resource('entity', EntityController::class);
 Route::middleware('auth:api')->resource('group', GroupController::class);
 Route::middleware('auth:api')->resource('division', DivisionController::class);
