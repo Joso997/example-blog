@@ -16,4 +16,5 @@ enum ObjectsEnum: int
     case Radio = 9;
     case Column = 10;
     case ColumnButton = 11;
+    case FieldButton = 12;
 }

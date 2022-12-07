@@ -8,8 +8,14 @@ use App\Services\CyberInterface\FormComponents\AlertComponent;
 use App\Services\CyberInterface\FormComponents\DataListComponent;
 use App\Services\CyberInterface\FormComponents\FieldComponent;
 use App\Services\CyberInterface\FormComponents\FieldViewComponent;
+use App\Services\CyberInterface\FormComponents\SelectListComponent;
 use App\Services\CyberInterface\FormComponents\SubmitComponent;
+use App\Services\CyberInterface\Helpers\ActionsEnum;
+use App\Services\CyberInterface\Helpers\Form\ElementTypeEnum;
+use App\Services\CyberInterface\Helpers\Form\FormObjects;
+use App\Services\CyberInterface\Helpers\ObjectsEnum;
 use App\Services\CyberInterface\Helpers\StatsEnum;
+use App\Services\CyberInterface\Helpers\SubObjectsEnum;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -63,10 +69,30 @@ class AttributeController extends Controller
         return response(
             [
                 (new FieldComponent("Name", "name"))->get(),
-                (new FieldComponent('Label Name', 'labelName'))->get(),
-                (new DataListComponent('Field Type', 'fieldType', []))
+                (new SelectListComponent('Field Type', 'fieldType', FormObjects::getObjectsForAttributes()))
+                    ->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)->get()
             ]
         );
+    }
+
+    public function resolveUserChoiceForm(int $option) : Response
+    {
+        $arr = null;
+        $arr[] = (new FieldComponent('Label Name', 'label'))->get();
+        $arr[] = (new FieldComponent('Bootstrap Class', 'design'))->setOptional(null,'', 'test')->get();
+        switch ($option){
+            case ObjectsEnum::Field->value:
+                $arr[] = (new SelectListComponent('Field Type', 'fieldType', array_map(
+                    fn (ElementTypeEnum $term) => ['id' => $term->name, 'name' => $term->value],
+                    ElementTypeEnum::cases()
+                )))->get();
+                $arr[] = (new FieldComponent('Placeholder', 'placeholder'))->get();
+                break;
+            case ObjectsEnum::CheckBox->value:
+                $arr[] = (new SubmitComponent('Add Value', 'add', 'btn btn-outline-success mb-2'))->get();
+                break;
+        }
+        return response($arr);
     }
 
     /**
@@ -81,7 +107,9 @@ class AttributeController extends Controller
         $group = null;
         $id = null;
         foreach ($request->all() as $stat ){
-            $id = $stat['Stats'][StatsEnum::Id->value]["Data"];
+            if(array_key_exists(StatsEnum::Id->value, $stat['Stats']))
+                if(!is_null($stat['Stats'][StatsEnum::Id->value]))
+                    $id = $stat['Stats'][StatsEnum::Id->value]["Data"];
             switch($stat['Stats'][StatsEnum::Tag->value]["Data"]){
                 case 'name':
                     $name = $stat['Stats'][StatsEnum::Value->value]["Data"];
