@@ -11,6 +11,7 @@ class Division extends Model
     use TraitUuid, HasFactory;
 
     protected $casts = [
-        'name' => 'string'
+        'name' => 'string',
+        'belongings' => 'array',
     ];
 }

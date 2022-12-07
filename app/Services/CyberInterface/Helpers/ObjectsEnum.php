@@ -17,4 +17,5 @@ enum ObjectsEnum: int
     case Column = 10;
     case ColumnButton = 11;
     case FieldButton = 12;
+    case SelectButton = 13;
 }
