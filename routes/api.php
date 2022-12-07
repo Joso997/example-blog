@@ -37,3 +37,6 @@ Route::middleware('auth:api')->get('form/division', [DivisionController::class, 
 Route::middleware('auth:api')->get('form/attribute', [AttributeController::class, 'resolveRegionForm']);
 Route::middleware('auth:api')->get('filter/attribute/{parentId}', [AttributeController::class, 'filterIndex']);
 Route::middleware('auth:api')->get('form/attribute/{option}', [AttributeController::class, 'resolveUserChoiceForm']);
+Route::middleware('auth:api')->get('permissions/user', [PermissionController::class, 'take']);
+
+Route::middleware('auth:api')->post('editAll/permission', [PermissionController::class, 'customUpdate']);

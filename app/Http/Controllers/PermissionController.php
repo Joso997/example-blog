@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Division;
 use App\Models\Permission;
+use App\Models\User;
+use App\Services\CyberInterface\FormComponents\FieldViewComponent;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PermissionController extends Controller
@@ -15,6 +19,7 @@ class PermissionController extends Controller
     public function index()
     {
         //
+        return response()->json(Permission::orderBy("lft","ASC")->get());
     }
 
     /**
@@ -81,5 +86,17 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         //
+    }
+    public function take()
+    {
+        $response = [];
+        $entities = Permission::orderBy('created_at', 'asc')->get();
+        foreach ($entities as $entity){
+            $response[] = [
+                (new FieldViewComponent("Name", "name", $entity->id))->setOptional($entity->name)->get(),
+            ];
+        }
+
+        return response()->json($response);
     }
 }
