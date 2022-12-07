@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
@@ -98,26 +100,45 @@ class PermissionController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Permission  $permission
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|Response
      */
     public function update(Request $request, Permission $permission)
     {
+        return response();
+    }
 
-        $permission->name = $request->name;
-        $permission->lft = $request->lft;
-        $permission->rgt = $request->rgt;
-        $permission->update();
-        return $request->name;
+    public function customUpdate(Request $request)
+    {
+        //rollback da se vrati ako neprođe foreach
+        var_dump($request->all());
+        $response = [];
+        foreach ($request->all() as $value) {
+            $tempPermission = Permission::find($value['id']);//validate if it is string
+            $tempPermission->name = $value['name'];
+            $tempPermission->lft = $value['lft'];
+            $tempPermission->rgt = $value['rgt'];
+            $tempPermission->update();
+            $response[] = $tempPermission->name;
+        }
+
+        return response()->json($response);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Permission  $permission
      * @return Response
      */
-    public function destroy(Permission $permission)
+    public function destroy(Permission $permission, Request $request)
     {
-        //
+        $userId = Auth::user()->id;
+        $permissionsId = User::find($userId)->permissions;
+        if(!in_array($permission->id, $permissionsId)){
+            $permission->delete();
+            return  response('false');
+        }
     }
+
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class UsersTableSeeder extends Seeder
+class PermissionTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,12 +17,11 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = new User();
-        $user->name = 'user';
-        $user->password = Hash::make('password');
-        $user->email = 'user@mail.com';
-        $user->permissions = Permission::first()->id;
-        $user->save();
+        $permission = new Permission();
+        $permission->name = 'root';
+        $permission->lft = 1;
+        $permission->rgt = 2;
+        $permission->save();
         //factory(App\User::class, 50)->create();
     }
 }
