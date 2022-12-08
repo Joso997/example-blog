@@ -57,7 +57,7 @@ Route::post('/testing', function (Request $request) {
             $tempRequest['objectJSON'] = json_encode($temp);
         }
     }
-    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', [$tempRequest]);
+    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', [$temp['master']]);
     return 'yes';
 });
 
