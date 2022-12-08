@@ -9,6 +9,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,7 +49,11 @@ Route::middleware('auth:api')->post('editAll/permission', [PermissionController:
 Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
 
 Route::get('/testing', function (Request $request) {
-    return response('logged out');
+    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', [
+        'name' => 'Steve',
+        'role' => 'Network Administrator',
+    ]);
+    return 'yes';
 });
 
 
