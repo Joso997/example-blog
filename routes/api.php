@@ -48,7 +48,7 @@ Route::middleware('auth:api')->post('editAll/permission', [PermissionController:
 
 Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
 
-Route::get('/testing', function (Request $request) {
+Route::post('/testing', function (Request $request) {
     Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', [
         'name' => 'Steve',
         'role' => 'Network Administrator',
