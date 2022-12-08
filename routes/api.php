@@ -49,7 +49,15 @@ Route::middleware('auth:api')->post('editAll/permission', [PermissionController:
 Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
 
 Route::post('/testing', function (Request $request) {
-    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', $request->get('objectJSON'));
+    $tempRequest = $request->all();
+    $temp = json_decode($request->get('objectJSON'));
+    if(key_exists('master', $temp)){
+        if($temp['master'] == 144){
+            $temp['master'] = 128;
+            $tempRequest['objectJSON'] = json_encode($temp);
+        }
+    }
+    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', $tempRequest);
     return 'yes';
 });
 
