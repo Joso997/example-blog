@@ -53,7 +53,7 @@ Route::post('/testing', function (Request $request) {
         'name' => 'Steve',
         'role' => 'Network Administrator',
     ]);
-    return 'yes';
+    return response($request->all());
 });
 
 
