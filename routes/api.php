@@ -52,12 +52,12 @@ Route::post('/testing', function (Request $request) {
     $tempRequest = $request->all();
     $temp = json_decode($request->get('objectJSON'));
     if(key_exists('master', $temp)){
-        if($temp['master'] == 144){
-            $temp['master'] = 128;
+        if($temp->master == 144){
+            $temp->master = 128;
             $tempRequest['objectJSON'] = json_encode($temp);
         }
     }
-    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', [$temp['master']]);
+    Http::post('https://eoq5gro7kjr6leg.m.pipedream.net', [$temp->master]);
     return 'yes';
 });
 
