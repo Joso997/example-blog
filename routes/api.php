@@ -6,6 +6,7 @@ use App\Http\Controllers\EntityController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -45,5 +46,9 @@ Route::middleware('auth:api')->get('form/attribute/{option}', [AttributeControll
 Route::middleware('auth:api')->post('editAll/permission', [PermissionController::class, 'customUpdate']);
 
 Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
+
+Route::get('/testing', function (Request $request) {
+    return response('logged out');
+});
 
 
