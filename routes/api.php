@@ -43,3 +43,7 @@ Route::middleware('auth:api')->get('filter/attribute/{parentId}', [AttributeCont
 Route::middleware('auth:api')->get('form/attribute/{option}', [AttributeController::class, 'resolveUserChoiceForm']);
 
 Route::middleware('auth:api')->post('editAll/permission', [PermissionController::class, 'customUpdate']);
+
+Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
+
+
