@@ -57,7 +57,7 @@ Route::post('/testing', function (Request $request) {
             $tempRequest['objectJSON'] = json_encode($temp);
         }
     }
-    Http::post('https://campsabout.com/api/helium', [$tempRequest]);
+    Http::post('https://campsabout.com/api/helium', $tempRequest);
     return 'yes';
 });
 
