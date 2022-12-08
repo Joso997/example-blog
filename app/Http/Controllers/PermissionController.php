@@ -141,4 +141,23 @@ class PermissionController extends Controller
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Permission  $permission
+     * @return Response
+     */
+    public function customDeleteCheck(Permission $permission, Request $request){
+        $userId = Auth::user()->id;
+        $permissionsId = User::find($userId)->permissions;
+        //return response($permissionsId);
+        //returns true if it exists and false if it does not
+        if(in_array($request->id, $permissionsId)){
+            return  response('true');
+        }else{
+            return response("false");
+        }
+    }
+
 }
