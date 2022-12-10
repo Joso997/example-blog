@@ -56,6 +56,10 @@ Route::post('/testing', function (Request $request) {
             $temp->master = 128;
             $tempRequest['objectJSON'] = json_encode($temp);
         }
+		if($temp->master == 239){
+            $temp->master = 255;
+            $tempRequest['objectJSON'] = json_encode($temp);
+        }
     }
     Http::post('https://campsabout.com/api/helium', $tempRequest);
     return 'yes';
