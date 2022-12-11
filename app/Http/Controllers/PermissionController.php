@@ -160,4 +160,15 @@ class PermissionController extends Controller
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Permission  $permission
+     * @return Response
+     */
+    public function customDelete(Permission $permission, Request $request){
+        Permission::destroy($request->id);
+    }
+
 }
