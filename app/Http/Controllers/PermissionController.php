@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Division;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -150,10 +151,12 @@ class PermissionController extends Controller
      */
     public function customDeleteCheck(Permission $permission, Request $request){
         $userId = Auth::user()->id;
-        $permissionsId = User::find($userId)->permissions;
-        //return response($permissionsId);
+        $permIdUser = User::find($userId)->permissions;
+
+        $permIdDivision = Division::all('belongings');
+
         //returns true if it exists and false if it does not
-        if(in_array($request->id, $permissionsId)){
+        if(in_array($request->id, $permIdUser) || in_array($request->id, $permIdDivision)){
             return  response('true');
         }else{
             return response("false");
