@@ -154,7 +154,7 @@ class PermissionController extends Controller
         $permIdUser = User::find($userId)->permissions;
 
         $permIdDivision = Division::all('belongings');
-
+        $permIdDivision = $permIdDivision->toArray();
         //returns true if it exists and false if it does not
         if(in_array($request->id, $permIdUser) || in_array($request->id, $permIdDivision)){
             return  response('true');
