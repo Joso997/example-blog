@@ -60,7 +60,7 @@ Route::post('/testing', function (Request $request) {
     $temp = json_decode($request->get('objectJSON'));
 	$name = $request->get('deviceName');
     if(property_exists($temp, 'master')){
-        if($temp->master == 144){
+        if($temp->master == 144 && $name != "tri-m-59fcc45e"){
             $temp->master = 128;
             $tempRequest['objectJSON'] = json_encode($temp);
         }
