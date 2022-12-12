@@ -68,11 +68,11 @@ Route::post('/testing', function (Request $request) {
             $temp->master = 255;
             $tempRequest['objectJSON'] = json_encode($temp);
         }*/
-		if($temp->master & (1 << 5) && $temp->master & (1 << 6) && $name == "tri-m-59fcc45e"){
-			modifyBit($temp->master, 4,1);
+		if(($temp->master & (1 << 5)) && ($temp->master & (1 << 6)) && $name == "tri-m-59fcc45e"){
+			$temp->master = modifyBit($temp->master, 4,1);
 			$tempRequest['objectJSON'] = json_encode($temp);
-		}else if(!$temp->master & (1 << 5) && !$temp->master & (1 << 6) && $name == "tri-m-59fcc45e"){
-			modifyBit($temp->master, 4,0);
+		}else if(!($temp->master & (1 << 5)) && !($temp->master & (1 << 6)) && $name == "tri-m-59fcc45e"){
+			$temp->master = modifyBit($temp->master, 4,0);
 			$tempRequest['objectJSON'] = json_encode($temp);
 		}
     }
