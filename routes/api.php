@@ -48,20 +48,35 @@ Route::middleware('auth:api')->post('editAll/permission', [PermissionController:
 
 Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
 
+function modifyBit($n, $p, $b)
+{
+    $mask = 1 << $p;
+    return ($n & ~$mask) |
+           (($b << $p) & $mask);
+}
+
 Route::post('/testing', function (Request $request) {
     $tempRequest = $request->all();
     $temp = json_decode($request->get('objectJSON'));
+	$name = $request->get('deviceName');
     if(property_exists($temp, 'master')){
         if($temp->master == 144){
             $temp->master = 128;
             $tempRequest['objectJSON'] = json_encode($temp);
         }
-		if($temp->master == 239){
+		/*if($temp->master == 239 && $name == "tri-m-59fcc45e"){
             $temp->master = 255;
             $tempRequest['objectJSON'] = json_encode($temp);
-        }
+        }*/
+		if($temp->master & (1 << 5) && $temp->master & (1 << 6) && $name == "tri-m-59fcc45e"){
+			modifyBit($temp->master, 4,1);
+			$tempRequest['objectJSON'] = json_encode($temp);
+		}else if(!$temp->master & (1 << 5) && !$temp->master & (1 << 6) && $name == "tri-m-59fcc45e"){
+			modifyBit($temp->master, 4,0);
+			$tempRequest['objectJSON'] = json_encode($temp);
+		}
     }
-    Http::post('https://campsabout.com/api/helium', $tempRequest);
+    Http::post('https://eo23ujbawsta7b6.m.pipedream.net', $tempRequest);
     return 'yes';
 });
 
