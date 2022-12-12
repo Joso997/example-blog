@@ -76,8 +76,6 @@ Route::post('/testing', function (Request $request) {
 			$tempRequest['objectJSON'] = json_encode($temp);
 		}
     }
-    Http::post('https://eo23ujbawsta7b6.m.pipedream.net', $tempRequest);
+    Http::post('https://campsabout.com/api/helium', $tempRequest);
     return 'yes';
 });
-
-
