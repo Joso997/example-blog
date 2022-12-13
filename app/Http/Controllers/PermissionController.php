@@ -8,13 +8,14 @@ use App\Models\User;
 use App\Services\CyberInterface\FormComponents\FieldViewComponent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index()
     {
@@ -87,13 +88,17 @@ class PermissionController extends Controller
     {
         //
     }
+
     public function take()
     {
         $response = [];
-        $entities = Permission::orderBy('created_at', 'asc')->get();
-        foreach ($entities as $entity){
+        $userPermissions = Auth::user()->permissions;
+        if(!is_array($userPermissions)){
+            $userPermissions[] = $userPermissions;
+        }
+        foreach ($userPermissions as $user){
             $response[] = [
-                (new FieldViewComponent("Name", "name", $entity->id))->setOptional($entity->name)->get(),
+                (new FieldViewComponent("Name", "name", $user->id))->setOptional(Permission::find($user)->name)->get(),
             ];
         }
 

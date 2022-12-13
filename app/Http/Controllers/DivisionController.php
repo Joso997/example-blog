@@ -24,7 +24,7 @@ class DivisionController extends Controller
         foreach ($entities as $entity){
             $response[] = [
                 (new FieldViewComponent("Name", "name", $entity->id))->setOptional($entity->name)->get(),
-                (new FieldViewComponent("Belong", "belong", $entity->id))->setOptional(json_decode($entity->belongings))->get(),
+                // (new FieldViewComponent("Belong", "belong", $entity->id))->setOptional($entity->belongings)->get(),
             ];
         }
 

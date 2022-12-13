@@ -4,8 +4,10 @@ use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RegionController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
