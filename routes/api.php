@@ -46,6 +46,12 @@ Route::middleware('auth:api')->get('form/attribute/{option}', [AttributeControll
 
 Route::middleware('auth:api')->get('permissions/user', [PermissionController::class, 'take']);
 Route::middleware('auth:api')->post('editAll/permission', [PermissionController::class, 'customUpdate']);
+
+Route::middleware('auth:api')->post('deleteCheck/permission', [PermissionController::class, 'customDeleteCheck']);
+Route::middleware('auth:api')->post('delete/permission', [PermissionController::class, 'customDelete']);
+
+
+
 Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
 
 Route::post('/testing', function (Request $request) {
@@ -60,3 +66,4 @@ Route::post('/testing', function (Request $request) {
     Http::post('https://campsabout.com/api/helium', $tempRequest);
     return 'yes';
 });
+

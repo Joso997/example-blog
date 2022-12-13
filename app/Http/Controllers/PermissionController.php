@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Division;
 use App\Models\Permission;
 use App\Models\User;
 use App\Services\CyberInterface\FormComponents\FieldViewComponent;
@@ -142,17 +143,50 @@ class PermissionController extends Controller
         }
     }
 
+
     public function take()
     {
         $response = [];
         $userPermissions = Auth::user()->permissions;
-        foreach ($userPermissions as $permissionId){
+        foreach ($userPermissions as $permissionId) {
             $response[] = [
                 (new FieldViewComponent("Name", "name", $permissionId))->setOptional(Permission::find($permissionId)->name)->get(),
             ];
         }
 
         return response()->json($response);
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Permission  $permission
+     * @return Response
+     */
+    public function customDeleteCheck(Permission $permission, Request $request){
+        $userId = Auth::user()->id;
+        $permIdUser = User::find($userId)->permissions;
+
+        $permIdDivision = Division::all('belongings');
+        $permIdDivision = $permIdDivision->toArray();
+        //returns true if it exists and false if it does not
+        if(in_array($request->id, $permIdUser) || in_array($request->id, $permIdDivision)){
+            return  response('true');
+        }else{
+            return response("false");
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Permission  $permission
+     * @return Response
+     */
+    public function customDelete(Permission $permission, Request $request){
+        Permission::destroy($request->id);
+
     }
 
 }
