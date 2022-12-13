@@ -146,12 +146,9 @@ class PermissionController extends Controller
     {
         $response = [];
         $userPermissions = Auth::user()->permissions;
-        if(!is_array($userPermissions)){
-            $userPermissions[] = $userPermissions;
-        }
-        foreach ($userPermissions as $user){
+        foreach ($userPermissions as $permissionId){
             $response[] = [
-                (new FieldViewComponent("Name", "name", $user->id))->setOptional(Permission::find($user)->name)->get(),
+                (new FieldViewComponent("Name", "name", $permissionId))->setOptional(Permission::find($permissionId)->name)->get(),
             ];
         }
 
