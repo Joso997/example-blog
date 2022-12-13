@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->string('name')->unique();
-            $table->json('belongings')->foreign('permission_id')->references('id')->on('permissions');
+            $table->json('belongings')->foreign('permission_id')->references('id')->on('permissions')->nullable();
             $table->timestamps();
         });
     }
