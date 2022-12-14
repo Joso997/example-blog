@@ -17,11 +17,12 @@ class DataListComponent extends ComponentAbstract
         parent::__construct($label, $tag, RegionsEnum::Form, ObjectsEnum::DataList, SubObjectsEnum::ParentObject, ActionsEnum::Insert);
     }
 
-    public function setOptional(string $value = null, string $design = "", string $placeholder = "", array $itemList = []): static
+    public function setOptional(string $value = null, string $design = "", string $placeholder = "", string $tooltip = "", array $itemList = []): static
     {
         $this->value = $value;
         $this->design = $design;
         $this->placeholder = $placeholder;
+        $this->tooltip = $tooltip;
         $this->itemList = $itemList;
         return $this;
     }
@@ -33,6 +34,7 @@ class DataListComponent extends ComponentAbstract
             StatsEnum::Design->value =>["Data" => $this->design],
             StatsEnum::Tag->value =>["Data" => $this->tag],
             StatsEnum::Placeholder->value =>["Data" => $this->placeholder],
+            StatsEnum::Tooltip->value =>["Data" => $this->tooltip],
             StatsEnum::ItemList->value =>["Data" => json_encode($this->itemList)]
         ];
     }

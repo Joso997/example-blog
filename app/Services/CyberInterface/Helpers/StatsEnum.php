@@ -12,6 +12,7 @@ enum StatsEnum: int
     case ElementType = 5;
     case Placeholder = 6;
     case ItemList = 7;
+    case Tooltip = 8;
 }
 
 

@@ -68,9 +68,9 @@ class AttributeController extends Controller
     {
         return response(
             [
-                (new FieldComponent("Name", "name"))->get(),
+                (new FieldComponent("Name", "name"))->setOptional(null,"","Attribute name", "Name of an attribute.")->get(),
                 (new SelectListComponent('Field Type', 'fieldType', FormObjects::getObjectsForAttributes()))
-                    ->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)->get()
+                    ->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)->setOptional(null,"","","Field type of an attribute.")->get()
             ]
         );
     }
@@ -78,8 +78,8 @@ class AttributeController extends Controller
     public function resolveUserChoiceForm(int $option) : Response
     {
         $arr = null;
-        $arr[] = (new FieldComponent('Label Name', 'label'))->get();
-        $arr[] = (new FieldComponent('Bootstrap Class', 'design'))->setOptional(null,'', 'test')->get();
+        $arr[] = (new FieldComponent('Label Name', 'label'))->setOptional(null, '','Label name',"Label name of an attribute.")->get();
+        $arr[] = (new FieldComponent('Bootstrap Class', 'design'))->setOptional(null,'', 'test', "Bootstrap class of an attribute.")->get();
         switch ($option){
             case ObjectsEnum::Field->value:
                 $arr[] = (new SelectListComponent('Field Type', 'fieldType', array_map(

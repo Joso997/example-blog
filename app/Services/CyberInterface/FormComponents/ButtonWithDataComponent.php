@@ -18,10 +18,11 @@ class ButtonWithDataComponent extends ComponentAbstract
         parent::__construct($label, $tag,RegionsEnum::Form, ObjectsEnum::Button,  SubObjectsEnum::Middle, ActionsEnum::Click);
     }
 
-    public function setOptional(string $value = null, string $design = "", array|string $itemList = ""): static
+    public function setOptional(string $value = null, string $design = "", string $tooltip = "", array|string $itemList = ""): static
     {
         $this->value = $value;
         $this->design = $design;
+        $this->tooltip = $tooltip;
         $this->itemList = $itemList;
         return $this;
     }
@@ -32,6 +33,7 @@ class ButtonWithDataComponent extends ComponentAbstract
             StatsEnum::Value->value => ["Data" => $this->value],
             StatsEnum::Design->value =>["Data" => $this->design],
             StatsEnum::Tag->value =>["Data" => $this->tag],
+            StatsEnum::Tooltip->value =>["Data" => $this->tooltip],
             StatsEnum::Id->value => ($this->id !== ''? ["Data" => $this->id]:["Data" => null]),
             StatsEnum::ItemList->value =>["Data" => json_encode($this->itemList)]
         ];

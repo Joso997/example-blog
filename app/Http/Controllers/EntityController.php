@@ -70,9 +70,9 @@ class EntityController extends Controller
     {
         return response(
             [
-                (new FieldComponent("Code", "code"))->get(),
-                (new DataListComponent("Division", "division", ["default"]))->get(),
-                (new DataListComponent("Group", "group", ["default"]))->get(),
+                (new FieldComponent("Code", "code"))->setOptional(null,"","Device code", "Code of a device.")->get(),
+                (new DataListComponent("Division", "division", ["default"]))->setOptional(null,"","Device division", "Division of a device.")->get(),
+                (new DataListComponent("Group", "group", ["default"]))->setOptional(null,"","Device group", "Group of a device.")->get(),
             ]
         );
     }

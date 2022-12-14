@@ -15,11 +15,12 @@ class SubmitComponent extends ComponentAbstract
         parent::__construct($label, $tag,RegionsEnum::Form, ObjectsEnum::Button,  SubObjectsEnum::Middle, ActionsEnum::Click);
     }
 
-    public function setOptional(string $value = null, string $design = "", string $placeholder = ""): static
+    public function setOptional(string $value = null, string $design = "", string $placeholder = "", string $tooltip = ""): static
     {
         $this->value = $value;
         $this->design = $design;
         $this->placeholder = $placeholder;
+        $this->tooltip = $tooltip;
         return $this;
     }
 
@@ -29,6 +30,7 @@ class SubmitComponent extends ComponentAbstract
             StatsEnum::Value->value => ["Data" => $this->value],
             StatsEnum::Design->value =>["Data" => $this->design],
             StatsEnum::Tag->value =>["Data" => $this->tag],
+            StatsEnum::Tooltip->value =>["Data" => $this->tooltip],
             StatsEnum::Id->value => ($this->id !== ''? ["Data" => $this->id]:["Data" => null])
         ];
     }
