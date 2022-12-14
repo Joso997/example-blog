@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attribute;
 use App\Models\Division;
 use App\Models\Entity;
 use App\Models\Group;
 use App\Services\CyberInterface\FormComponents\DataListComponent;
 use App\Services\CyberInterface\FormComponents\FieldComponent;
+use App\Services\CyberInterface\FormComponents\SelectListComponent;
+use App\Services\CyberInterface\FormComponents\SubmitComponent;
 use App\Services\CyberInterface\Helpers\ActionsEnum;
+use App\Services\CyberInterface\Helpers\Form\ElementTypeEnum;
 use App\Services\CyberInterface\Helpers\ObjectsEnum;
 use App\Services\CyberInterface\Helpers\RegionsEnum;
 use App\Services\CyberInterface\Helpers\StatsEnum;
@@ -72,9 +76,21 @@ class EntityController extends Controller
             [
                 (new FieldComponent("Code", "code"))->get(),
                 (new DataListComponent("Division", "division", ["default"]))->get(),
-                (new DataListComponent("Group", "group", ["default"]))->get(),
+                (new SelectListComponent('Group', 'group', array_map(
+                    fn ($term) => ['id' => $term['id'], 'name' => $term['name']],
+                    Group::all()->toArray()
+                )))->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)->get()
             ]
         );
+    }
+
+    public function resolveUserChoiceForm(string $option) : Response
+    {
+        //dd($option);
+        $group = Group::find($option);
+        $attributes = Attribute::where('group', $group->id)->get()->plunk('attribute_finalize');
+
+        return response($attributes);
     }
 
     /**

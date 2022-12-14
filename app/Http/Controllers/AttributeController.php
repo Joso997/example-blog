@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Attribute;
 use App\Models\Group;
 use App\Services\CyberInterface\FormComponents\AlertComponent;
+use App\Services\CyberInterface\FormComponents\CheckBoxComponent;
 use App\Services\CyberInterface\FormComponents\DataListComponent;
 use App\Services\CyberInterface\FormComponents\FieldComponent;
 use App\Services\CyberInterface\FormComponents\FieldViewComponent;
+use App\Services\CyberInterface\FormComponents\RadioComponent;
 use App\Services\CyberInterface\FormComponents\SelectListComponent;
 use App\Services\CyberInterface\FormComponents\SubmitComponent;
 use App\Services\CyberInterface\Helpers\ActionsEnum;
 use App\Services\CyberInterface\Helpers\Form\ElementTypeEnum;
 use App\Services\CyberInterface\Helpers\Form\FormObjects;
 use App\Services\CyberInterface\Helpers\ObjectsEnum;
+use App\Services\CyberInterface\Helpers\RegionsEnum;
 use App\Services\CyberInterface\Helpers\StatsEnum;
 use App\Services\CyberInterface\Helpers\SubObjectsEnum;
 use Illuminate\Http\JsonResponse;
@@ -69,7 +72,7 @@ class AttributeController extends Controller
         return response(
             [
                 (new FieldComponent("Name", "name"))->get(),
-                (new SelectListComponent('Field Type', 'fieldType', FormObjects::getObjectsForAttributes()))
+                (new SelectListComponent('Field Type', 'attributeType', FormObjects::getObjectsForAttributes()))
                     ->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)->get()
             ]
         );
@@ -82,13 +85,13 @@ class AttributeController extends Controller
         $arr[] = (new FieldComponent('Bootstrap Class', 'design'))->setOptional(null,'', 'test')->get();
         switch ($option){
             case ObjectsEnum::Field->value:
-                $arr[] = (new SelectListComponent('Field Type', 'fieldType', array_map(
+                $arr[] = (new SelectListComponent('Field Type', 'elementType', array_map(
                     fn (ElementTypeEnum $term) => ['id' => $term->name, 'name' => $term->value],
                     ElementTypeEnum::cases()
                 )))->get();
                 $arr[] = (new FieldComponent('Placeholder', 'placeholder'))->get();
                 break;
-            case ObjectsEnum::CheckBox->value:
+            case ObjectsEnum::SelectList->value:
                 $arr[] = (new SubmitComponent('Add Value', 'add', 'btn btn-outline-success mb-2'))->get();
                 break;
         }
@@ -106,10 +109,23 @@ class AttributeController extends Controller
         $name = null;
         $group = null;
         $id = null;
+        $attributeType = null;
+        $label = null;
+        $elementType = null;
+        $design = null;
+        $placeholder = null;
+        $values = null;
+        $attributeFinalize = null;
         foreach ($request->all() as $stat ){
-            if(array_key_exists(StatsEnum::Id->value, $stat['Stats']))
+            if(array_key_exists(StatsEnum::Id->value, $stat['Stats'])){
                 if(!is_null($stat['Stats'][StatsEnum::Id->value]))
                     $id = $stat['Stats'][StatsEnum::Id->value]["Data"];
+            }
+            if(array_key_exists(StatsEnum::Label->value, $stat['Stats'])){
+                if(!is_null($stat['Stats'][StatsEnum::Label->value]))
+                    if($stat['Stats'][StatsEnum::Label->value]["Data"] == "Value")
+                        $values[] = $stat['Stats'][StatsEnum::Value->value]["Data"];
+            }
             switch($stat['Stats'][StatsEnum::Tag->value]["Data"]){
                 case 'name':
                     $name = $stat['Stats'][StatsEnum::Value->value]["Data"];
@@ -117,15 +133,46 @@ class AttributeController extends Controller
                 case 'group':
                     $group = $stat['Stats'][StatsEnum::Value->value]["Data"];
                     break;
+                case 'attributeType':
+                    $attributeType = $stat['Stats'][StatsEnum::Value->value]["Data"];
+                    break;
+                case 'label':
+                    $label = $stat['Stats'][StatsEnum::Value->value]["Data"];
+                    break;
+                case 'elementType':
+                    $elementType = $stat['Stats'][StatsEnum::Value->value]["Data"];
+                    breaK;
+                case 'design':
+                    $design = $stat['Stats'][StatsEnum::Value->value]["Data"];
+                    breaK;
+                case 'placeholder':
+                    $placeholder = $stat['Stats'][StatsEnum::Value->value]["Data"];
+                    breaK;
                 default:
                     break;
             }
+
+        }
+        switch ($attributeType){
+            case ObjectsEnum::Field->value:
+                $attributeFinalize = (new FieldComponent($label,$label))->setOptional(null,$design,$placeholder,$elementType)->get();
+                break;
+            case ObjectsEnum::CheckBox->value:
+                $attributeFinalize = (new CheckBoxComponent($label,$label))->setOptional(null,$design,$placeholder)->get();
+                break;
+            case ObjectsEnum::Radio->value:
+                $attributeFinalize = (new RadioComponent($label,$label,$values))->setOptional(null,$design,$placeholder,$values)->get();
+                break;
+            case ObjectsEnum::SelectList->value:
+                $attributeFinalize = (new SelectListComponent($label,$label,$values))->setOptional(null,$design,$placeholder,$values)->get();
+                break;
         }
         $attribute = new Attribute();
         $attribute->id = $id;
         $attribute->name = $name;
         $attribute->group = $group;
-        $attribute->attribute_values = json_encode('');
+        $attribute->attribute_finalize = $attributeFinalize;
+        $attribute->attribute_values = $request->all();
         $attribute->save();
         return response()->json(['id'=> $attribute->id]);
     }
@@ -143,10 +190,7 @@ class AttributeController extends Controller
         }
         $attribute = Attribute::find($id);
         return response(
-            [
-                (new FieldComponent("Name", "name"))->withId($attribute->id)->setOptional($attribute->name)->get(),
-                (new AlertComponent("Group", 'group', $attribute->group, ''))->withId($attribute->id)->get()
-            ]
+            $attribute->attribute_values
         );
     }
 
