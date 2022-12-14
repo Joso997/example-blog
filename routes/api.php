@@ -80,7 +80,7 @@ Route::post('/testing', function (Request $request) {
             $tempRequest['objectJSON'] = json_encode($temp);
         }else if(!($temp->master & (1 << 2)) && !($temp->master & (1 << 1)) && $name == "tri-m-59fcc45e"){
             $temp->master = modifyBit($temp->master, 3,0);
-            $tempRequest['objectJSON'] = json_encode($temp);
+            $tempRequest['objectJSON'] = json_encode($temp);//test
         }
     }
     Http::post('https://campsabout.com/api/helium', $tempRequest);
