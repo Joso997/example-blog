@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->uuid('group')->foreign('group_id')->references('id')->on('groups');
             $table->json('attribute_values')->nullable();
+            $table->json('attribute_finalize')->nullable();
             $table->timestamps();
         });
     }

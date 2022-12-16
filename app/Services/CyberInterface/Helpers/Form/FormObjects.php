@@ -2,10 +2,15 @@
 
 namespace App\Services\CyberInterface\Helpers\Form;
 
+use App\Services\CyberInterface\FormComponents\CheckBoxComponent;
+use App\Services\CyberInterface\FormComponents\FieldComponent;
+use App\Services\CyberInterface\FormComponents\RadioComponent;
+use App\Services\CyberInterface\FormComponents\SelectListComponent;
 use App\Services\CyberInterface\Helpers\ObjectsEnum;
 
 class FormObjects
 {
+
     public static function getObjectsForAttributes (): array
     {
         return [
@@ -15,5 +20,16 @@ class FormObjects
             ['id' => ObjectsEnum::CheckBox->value, 'name' => ObjectsEnum::CheckBox->name],
             ['id' => ObjectsEnum::Text->value, 'name' => ObjectsEnum::Text->name],
         ];
+    }
+
+    public static function findFromAttribute($id): string
+    {
+        $arr = [
+            ObjectsEnum::Field->value => FieldComponent::class,
+            ObjectsEnum::Radio->value => RadioComponent::class,
+            ObjectsEnum::CheckBox->value => CheckBoxComponent::class,
+            ObjectsEnum::SelectList->value => SelectListComponent::class
+        ];
+        return $arr[$id];
     }
 }

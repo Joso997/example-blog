@@ -15,6 +15,8 @@ class Attribute extends Model
     ];
 
     protected $casts = [
-        'name' => 'string'
+        'name' => 'string',
+        'attribute_finalize' =>'array',
+        'attribute_values' =>'array'
     ];
 }
