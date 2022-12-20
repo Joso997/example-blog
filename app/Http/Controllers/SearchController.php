@@ -22,16 +22,50 @@ class SearchController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+
+    public function group_division(string $title): JsonResponse
     {
-        $response = [];
-        $groups = Group::orderBy('created_at', 'asc')->get();
-        foreach ($groups as $group){
-            $response[] = [
-                (new FieldViewComponent("Name", "name", $group->id))->setOptional($group->name)->get(),
-            ];
+        $responseGroup = null;
+        $responseDivision = null;
+        $responseFinal = null;
+        $groups=Group::orderBy('created_at','asc')->get()->pluck('name', 'id');
+        $divisions=Division::orderBy('created_at','asc')->get()->pluck('name', 'id');
+        foreach ($groups as $key => $value){
+
+            if(strpos($title, $value)){
+                $responseGroup[]=(new FieldViewComponent('Test', 'test', $key))->setOptional($value)->get();
+            }
+        }
+        foreach ($divisions as $key => $value){
+            if (strpos($title, $value)) {
+                $responseDivision[]=(new FieldViewComponent('Test', 'test', $key))->setOptional($value)->get();
+            }
+        }
+        if(str_contains($title, 'group:')){
+            $responseFinal[] = $responseGroup;
+        }
+        if(str_contains($title, 'division:')){
+            $responseFinal[]=$responseDivision;
         }
 
+        return response()->json($responseFinal);
+    }
+
+
+    public function index(string $title): JsonResponse
+    {
+        $response = null;
+        $entity=Entity::orderBy('created_at','asc')->get()->pluck('attribute_values');
+        foreach ($entity as $entities){
+            $inResponse = null;
+            foreach ($entities as $item){
+                $item = (object)$item;
+                if($item->Stats[StatsEnum::Value->value]['Data'] === $title){
+                    $inResponse[] = $item;
+                }
+            }
+            $response[]=$inResponse;
+        }
         return response()->json($response);
     }
 
