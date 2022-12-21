@@ -49,7 +49,7 @@ class GroupController extends Controller
     {
         return response(
             [
-                (new FieldComponent("Name", "name"))->get(),
+                (new FieldComponent("Name", "name"))->setOptional(null,"","Group name","Name of a device group.")->get(),
             ]
         );
     }
@@ -95,8 +95,8 @@ class GroupController extends Controller
         $group = Group::find($id);
         return response(
             [
-                (new FieldComponent("Name", "name"))->withId($group->id)->setOptional($group->name)->get(),
-                (new SubmitComponent("Add Attribute", "SubmitButton", 'btn btn-primary mb-3'))->withId($group->id)->get()
+                (new FieldComponent("Name", "name"))->withId($group->id)->setOptional($group->name)->setOptional(null, "", "Attribute name","Name of a new attribute.")->get(),
+                (new SubmitComponent("Add Attribute", "SubmitButton", 'btn btn-primary mb-3'))->setOptional(null,"btn btn-secondary mb-3", "", "Click to add a new group of devices.")->withId($group->id)->get()
             ]
         );
     }

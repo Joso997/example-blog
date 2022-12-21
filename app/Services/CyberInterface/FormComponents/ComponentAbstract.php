@@ -14,13 +14,14 @@ abstract class ComponentAbstract
     protected ?string $value = null;
     protected string $design = "";
     protected string $placeholder = "";
+    protected string $tooltip = "";
     protected string $id = "";
     protected RegionsEnum $region;
     protected ObjectsEnum $objectType;
     protected SubObjectsEnum $subObjectType;
     protected ActionsEnum $action;
 
-    abstract public function setOptional(string $value = null, string $design = "", string $placeholder = ""): static;
+    abstract public function setOptional(string $value = null, string $design = "", string $placeholder = "", string $tooltip = ""): static;
     abstract protected function setStats() : array;
 
     public function __construct(string $label, string $tag, RegionsEnum $region, ObjectsEnum $objectType, SubObjectsEnum $subObjectType, ActionsEnum $action){

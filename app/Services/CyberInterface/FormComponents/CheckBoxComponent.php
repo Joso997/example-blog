@@ -17,11 +17,12 @@ class CheckBoxComponent extends ComponentAbstract
         parent::__construct($label, $tag, RegionsEnum::Form, ObjectsEnum::CheckBox, SubObjectsEnum::ParentObject, ActionsEnum::Check);
     }
 
-    public function setOptional(string $value = null, string $design = "", string $placeholder = "", string $elementType = ""): static
+    public function setOptional(string $value = null, string $design = "", string $placeholder = "", string $tooltip = "", string $elementType = ""): static
     {
         $this->value = $value;
         $this->design = $design;
         $this->placeholder = $placeholder;
+        $this->tooltip = $tooltip;
         $this->elementType = $elementType;
         return $this;
     }
@@ -34,6 +35,7 @@ class CheckBoxComponent extends ComponentAbstract
             StatsEnum::Tag->value =>["Data" => $this->tag],
             StatsEnum::ElementType->value =>["Data" => $this->elementType],
             StatsEnum::Placeholder->value =>["Data" => $this->placeholder],
+            StatsEnum::Tooltip->value =>["Data" => $this->tooltip],
         ];
     }
 }

@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
         $user->name = 'user';
         $user->password = Hash::make('password');
         $user->email = 'user@mail.com';
-        $user->permissions = Permission::first()->id;
+        $user->permissions = [Permission::first()->id];
         $user->save();
         //factory(App\User::class, 50)->create();
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +35,7 @@ Route::middleware('auth:api')->resource('entity', EntityController::class);
 Route::middleware('auth:api')->resource('group', GroupController::class);
 Route::middleware('auth:api')->resource('division', DivisionController::class);
 Route::middleware('auth:api')->resource('permission', PermissionController::class);
-Route::middleware('auth:api')->resource('attribute', AttributeController::class);
+Route::/*middleware('auth:api')->*/resource('attribute', AttributeController::class);
 
 Route::middleware('auth:api')->get('form/entity', [EntityController::class, 'resolveRegionForm']);
 Route::middleware('auth:api')->get('form/group', [GroupController::class, 'resolveRegionForm']);
@@ -42,11 +43,29 @@ Route::middleware('auth:api')->get('form/division', [DivisionController::class, 
 Route::middleware('auth:api')->get('form/attribute', [AttributeController::class, 'resolveRegionForm']);
 Route::middleware('auth:api')->get('filter/attribute/{parentId}', [AttributeController::class, 'filterIndex']);
 Route::middleware('auth:api')->get('form/attribute/{option}', [AttributeController::class, 'resolveUserChoiceForm']);
+Route::middleware('auth:api')->get('form/entity/{option}', [EntityController::class, 'resolveUserChoiceForm']);
 
+Route::middleware('auth:api')->get('permissions/user', [PermissionController::class, 'take']);
 Route::middleware('auth:api')->post('editAll/permission', [PermissionController::class, 'customUpdate']);
-
 
 Route::get('search/{title}',[SearchController::class,'group_division']);
 
+Route::middleware('auth:api')->post('deleteCheck/permission', [PermissionController::class, 'customDeleteCheck']);
+Route::middleware('auth:api')->post('delete/permission', [PermissionController::class, 'customDelete']);
 
+Route::middleware('auth:api')->post('search', [SearchController::class, 'index']);
+
+
+Route::post('/testing', function (Request $request) {
+    $tempRequest = $request->all();
+    $temp = json_decode($request->get('objectJSON'));
+    if(property_exists($temp, 'master')){
+        if($temp->master == 144){
+            $temp->master = 128;
+            $tempRequest['objectJSON'] = json_encode($temp);
+        }
+    }
+    Http::post('https://campsabout.com/api/helium', $tempRequest);
+    return 'yes';
+});
 

@@ -51,7 +51,7 @@ class DivisionController extends Controller
     {
         return response(
             [
-                (new FieldComponent("Name", "name"))->get(),
+                (new FieldComponent("Name", "name"))->setOptional(null,"","Division name","Name of a device division.")->get(),
                 (new ButtonWithDataComponent('Add Permission', 'add', 'btn btn-outline-success mb-2', array_map(
                     fn (array $term) => ['id' => $term['id'], 'name' => $term['name']],
                     Permission::all()->toArray()
