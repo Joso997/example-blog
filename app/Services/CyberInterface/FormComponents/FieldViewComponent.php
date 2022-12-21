@@ -28,6 +28,7 @@ class FieldViewComponent extends ComponentAbstract
         return [
             StatsEnum::Label->value =>["Data" => $this->label],
             StatsEnum::Value->value => ["Data" => $this->value],
+            StatsEnum::Design->value => ["Data" => $this->design],
             StatsEnum::Tag->value =>["Data" => $this->tag],
             StatsEnum::Id->value =>["Data" => $this->id]
         ];
