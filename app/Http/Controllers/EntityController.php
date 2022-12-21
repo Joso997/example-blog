@@ -80,7 +80,7 @@ class EntityController extends Controller
                     fn ($term) => ['id' => $term['id'], 'name' => $term['name']],
                     Group::all()->toArray()
                 )))->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)
-                    ->setOptional(null,"","Device group", "Group of a device.")->get()
+                    /*->setOptional(null,"","Device group", "Group of a device.")*/->get()
             ]
         );
     }
@@ -88,8 +88,9 @@ class EntityController extends Controller
     public function resolveUserChoiceForm(string $option) : Response
     {
         //dd($option);
+        //var_dump($option);
         $group = Group::find($option);
-        $attributes = Attribute::where('group', $group->id)->get()->plunk('attribute_finalize');
+        $attributes = Attribute::where('group', $group->id)->get()->pluck('attribute_finalize');
 
         return response($attributes);
     }
