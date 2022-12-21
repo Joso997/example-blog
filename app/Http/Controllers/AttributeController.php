@@ -73,7 +73,8 @@ class AttributeController extends Controller
             [
                 (new FieldComponent("Name", "name"))->setOptional(null,"","Attribute name", "Name of an attribute.")->get(),
                 (new SelectListComponent('Field Type', 'fieldType', FormObjects::getObjectsForAttributes()))
-                    ->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)->setOptional(null,"","","Field type of an attribute.")->get()
+                    ->changeDefaultSubObjectType(SubObjectsEnum::Middle)->changeDefaultAction(ActionsEnum::InsertClick)
+                    /*->setOptional(null,"","","Field type of an attribute.")*/->get()
             ]
         );
     }
