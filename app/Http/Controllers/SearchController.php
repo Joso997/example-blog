@@ -33,12 +33,12 @@ class SearchController extends Controller
         foreach ($groups as $key => $value){
 
             if(strpos($title, $value)){
-                $responseGroup[]=(new FieldViewComponent('Test', 'name', $key))->setOptional($value)->get();
+                $responseGroup[]=(new FieldViewComponent('Group', 'name', $key))->setOptional($value)->get();
             }
         }
         foreach ($divisions as $key => $value){
             if (strpos($title, $value)) {
-                $responseDivision[]=(new FieldViewComponent('Test', 'name', $key))->setOptional($value)->get();
+                $responseDivision[]=(new FieldViewComponent('Division', 'name', $key))->setOptional($value)->get();
             }
         }
         if(str_contains($title, 'group:')){
