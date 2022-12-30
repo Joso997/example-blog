@@ -25,19 +25,18 @@ class SearchController extends Controller
 
     public function group_division(string $title): JsonResponse
     {
-        $responseGroup = null;
-        $responseDivision = null;
-        $responseFinal = null;
+        $responseGroup = [];
+        $responseDivision = [];
+        $responseFinal = [];
         $groups=Group::orderBy('created_at','asc')->get()->pluck('name', 'id');
         $divisions=Division::orderBy('created_at','asc')->get()->pluck('name', 'id');
         foreach ($groups as $key => $value){
-
-            if(strpos($title, $value)){
+            if(str_contains($title, "group:".$value)){
                 $responseGroup[]=(new FieldViewComponent('Group', 'name', $key))->setOptional($value)->get();
             }
         }
         foreach ($divisions as $key => $value){
-            if (strpos($title, $value)) {
+            if (str_contains($title, "division:"."$value")) {
                 $responseDivision[]=(new FieldViewComponent('Division', 'name', $key))->setOptional($value)->get();
             }
         }
