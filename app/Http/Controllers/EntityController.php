@@ -75,7 +75,10 @@ class EntityController extends Controller
         return response(
             [
                 (new FieldComponent("Code", "code"))->setOptional(null,"","Device code", "Code of a device.")->get(),
-                (new DataListComponent("Division", "division", ["default"]))->setOptional(null,"","Device division", "Division of a device.")->get(),
+                (new SelectListComponent("Division", "division", array_map(
+                    fn ($term) => ['id' => $term['id'], 'name' => $term['name']],
+                    Division::all()->toArray()
+                )))/*->setOptional(null,"","Device division", "Division of a device.")*/->get(),
                 (new SelectListComponent('Group', 'group', array_map(
                     fn ($term) => ['id' => $term['id'], 'name' => $term['name']],
                     Group::all()->toArray()
@@ -126,8 +129,8 @@ class EntityController extends Controller
         $entity = new Entity();
         $entity->id = $id;
         $entity->code = $code;
-        $entity->divisions = json_encode(Division::where('name', $division)->first()->id);
-        $entity->group = Group::where('name', $group)->first()->id;
+        $entity->divisions = json_encode(Division::where('id', $division)->first()->id);
+        $entity->group = Group::where('id', $group)->first()->id;
         $entity->attribute_values = $request->all();
         $entity->save();
         return response()->json(['id'=> $entity->id]);
