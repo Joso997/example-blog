@@ -27,26 +27,49 @@ class SearchController extends Controller
     {
         $responseGroup = [];
         $responseDivision = [];
+        $responseDevice = [];
         $responseFinal = [];
-        $groups=Group::orderBy('created_at','asc')->get()->pluck('name', 'id');
-        $divisions=Division::orderBy('created_at','asc')->get()->pluck('name', 'id');
-        foreach ($groups as $key => $value){
-            if(str_contains($title, "group:".$value)){
-                $responseGroup[]=(new FieldViewComponent('Group', 'name', $key))->setOptional($value)->get();
+        $groups = null;
+        $divisions = null;
+        $devices = null;
+        $titles = explode('"', $title);
+        $deviceTitle = "";
+        foreach ($titles as $value){
+            if(str_contains($value, "group:")){
+            $groups = Group::where('name', 'LIKE',$value)->orderBy('created_at', 'asc')->get()->pluck('name', 'id');
+                }
+            if(str_contains($value, "division:")){
+                $divisions = Division::where('name','LIKE', $value)->orderBy('created_at','asc')->get()->pluck('name', 'id');
             }
         }
-        foreach ($divisions as $key => $value){
-            if (str_contains($title, "division:"."$value")) {
-                $responseDivision[]=(new FieldViewComponent('Division', 'name', $key))->setOptional($value)->get();
+        foreach ($titles as $value){
+            if(str_contains($value, "device:")){
+                $devices=Entity::where('group','')->where('divisions', '')->where('code','LIKE', $deviceTitle/*mozda pretvorit u base64*/)->orderBy('created_at','asc')->get()->pluck('code', 'id');
+                dd($devices);
             }
         }
+
+        foreach ($titles as  $key => $value){
+            if(str_contains($value, "group")){
+                $responseGroup[] = (new FieldViewComponent('Device', 'name', $key))->setOptional($value)->get();
+            }
+            if(str_contains($value, "division")){
+                $responseDivision[] = (new FieldViewComponent('Device', 'name', $key))->setOptional($value)->get();
+            }
+            if(str_contains($value, "device")){
+                $responseDevice[] = (new FieldViewComponent('Device', 'name', $key))->setOptional($value)->get();
+            }
+        }
+
         if(str_contains($title, 'group:')){
             $responseFinal[] = $responseGroup;
         }
         if(str_contains($title, 'division:')){
             $responseFinal[]=$responseDivision;
         }
-
+        if(str_contains($title, 'device:')){
+            $responseFinal[]=$responseDevice;
+        }
         return response()->json($responseFinal);
     }
 
