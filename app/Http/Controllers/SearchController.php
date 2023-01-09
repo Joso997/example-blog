@@ -35,9 +35,12 @@ class SearchController extends Controller
         $titles = explode('"', $title);
         $deviceTitle = "";
         foreach ($titles as $value){
+
             if(str_contains($value, "group:")){
-            $groups = Group::where('name', 'LIKE',$value)->orderBy('created_at', 'asc')->get()->pluck('name', 'id');
-                }
+                $temp = explode(':', $value);
+                $groups = Group::where('name', 'LIKE', last($temp))->orderBy('created_at', 'asc')->get()->pluck('name', 'id');
+                //var_dump($groups);
+            }
             if(str_contains($value, "division:")){
                 $divisions = Division::where('name','LIKE', $value)->orderBy('created_at','asc')->get()->pluck('name', 'id');
             }
@@ -48,8 +51,11 @@ class SearchController extends Controller
                 dd($devices);
             }
         }
+        foreach($groups as $key => $value){
+            $responseGroup[] = (new FieldViewComponent('Group', 'name', $key))->setOptional($value)->get();
+        }
 
-        foreach ($titles as  $key => $value){
+        /*foreach ($titles as  $key => $value){
             if(str_contains($value, "group")){
                 $responseGroup[] = (new FieldViewComponent('Device', 'name', $key))->setOptional($value)->get();
             }
@@ -59,7 +65,7 @@ class SearchController extends Controller
             if(str_contains($value, "device")){
                 $responseDevice[] = (new FieldViewComponent('Device', 'name', $key))->setOptional($value)->get();
             }
-        }
+        }*/
 
         if(str_contains($title, 'group:')){
             $responseFinal[] = $responseGroup;
