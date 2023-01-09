@@ -8,6 +8,7 @@ use App\Models\Entity;
 use App\Models\Group;
 use App\Services\CyberInterface\FormComponents\DataListComponent;
 use App\Services\CyberInterface\FormComponents\FieldComponent;
+use App\Services\CyberInterface\FormComponents\FieldViewComponent;
 use App\Services\CyberInterface\FormComponents\SelectListComponent;
 use App\Services\CyberInterface\FormComponents\SubmitComponent;
 use App\Services\CyberInterface\Helpers\ActionsEnum;
@@ -45,11 +46,15 @@ class EntityController extends Controller
             foreach ($entity as $item){
                 $item = (object)$item;
                 switch($item->Stats[StatsEnum::Tag->value]['Data']){
-                    case 'id':
-                    case 'division':
-                    case 'group':
+                    //case 'id':
                     case 'code':
                         $inResponse[] = $item;
+                        break;
+                    case 'division':
+                        $inResponse[] = (new FieldViewComponent("Division", "division", $item->Stats[StatsEnum::Id->value]['Data']))->setOptional(Division::find($item->Stats[StatsEnum::Value->value]['Data'])->name)->get();
+                        break;
+                    case 'group':
+                        $inResponse[] = (new FieldViewComponent("Group", "group", $item->Stats[StatsEnum::Id->value]['Data']))->setOptional(Group::find($item->Stats[StatsEnum::Value->value]['Data'])->name)->get();
                         break;
                     default:
                         break;
@@ -57,6 +62,7 @@ class EntityController extends Controller
             }
             $response[] = $inResponse;
         }
+
         return response()->json($response);
     }
 

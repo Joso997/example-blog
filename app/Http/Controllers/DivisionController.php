@@ -84,6 +84,7 @@ class DivisionController extends Controller
             }
             switch($stat['Stats'][StatsEnum::Label->value]["Data"]){
                 case 'Permission':
+                    if(is_null($stat['Stats'][StatsEnum::Value->value]["Data"])){break;}
                     $permissionId[] = $stat['Stats'][StatsEnum::Value->value]["Data"];
                     break;
                 default:
@@ -118,7 +119,7 @@ class DivisionController extends Controller
         )))->withId($division->id)->get();
         if(!is_null($division->belongings)){
             foreach ($division->belongings as $belonging){
-                $response[] = (new SelectButtonComponent('Permission', Str::random(6), $belonging, array_map(
+                $response[] = (new SelectButtonComponent('Permission', Str::random(6), is_null($belonging)?"":$belonging, array_map(
                     fn (array $term) => ['id' => $term['id'], 'name' => $term['name']],
                     Permission::all()->toArray()
                 )))->withId($division->id)->get();
